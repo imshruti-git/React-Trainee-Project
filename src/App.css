@@ -78,3 +78,17 @@ input, option{
   float: right;
   cursor: pointer;
 }
+
+.error_message{
+  color: red;
+  padding-left: 1rem;
+  padding-bottom: 12px;
+}
+
+.snakbar{
+  border: 1px solid red;
+  position: fixed;
+  bottom: 30px;
+  padding: 10px 30px;
+  left: 30px;
+}

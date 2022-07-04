@@ -2,45 +2,61 @@ import { useState } from 'react';
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { Form } from './components/Form';
-import { deleteEmployees, toggleModal } from './redux/actions/employeeActions';
+import { deleteEmployees, editEmployees, toggleModal, toggleModalEdit } from './redux/actions/employeeActions';
+import { EditForm } from './components/EditForm';
+
 
 function App() {
   const dispatch = useDispatch();
 
   const employees = useSelector((state) => state.allEmployees.employees);
-  const openmodal = useSelector((state) => state)
-  // console.log(employees);
+  const openmodal = useSelector((state) => state.allEmployees.modalOpen);
+  const openeditmodal = useSelector((state) => state.allEmployees.modalEditOpen);
 
+  const handlemodalopen = () =>{
+    dispatch(toggleModal(true));
+  }
 
+  const handleclose = () => {
+    dispatch(toggleModal(false));
+  }
+
+  const handleeditclose = () => {
+    dispatch(toggleModalEdit(false))
+  }
+
+  const handlclick = (item) => {
+    dispatch(editEmployees(item.id));
+   dispatch(toggleModalEdit(true));
+ }
+
+ 
+  
   //  const [openmodal, setOpenmodal] = useState();
 
   // const handlemodalopen=()=>{
   //   openmodal === false ? setOpenmodal(true) : setOpenmodal(false);
   // }
 
-  const handlemodalopen = () =>{
-    dispatch(toggleModal());
-  }
-
   const handledelete =(item)=>{
     dispatch(deleteEmployees(item.id))
   }
+  
   return (
     <div className="App">
          <div className='header-container'>
           <span className='main-title'>List of employees </span>
           <button className='btn' onClick={handlemodalopen}>Add Employee</button>
       </div>
-       {openmodal === true  && 
-            
+       {openmodal && 
               <div className='modal-container'>
                 <div className='modal'>
-                  <span className='close' onClick={handlemodalopen}>X</span>
+                  <span className='close' onClick={handleclose}>X</span>
                     <Form />
                 </div>
               </div>
-            
       } 
+      
       <table className='main-table'>
         <tbody>
           <tr>
@@ -62,10 +78,19 @@ function App() {
                   <td>{item.phone}</td>
                   <td>{item.gender}</td>
                   <td>{item.occupation}</td>
-                  <td><span>EDIT</span><br/>
+                  <td><span onClick={()=>handlclick(item)}>EDIT</span><br/>
                       <span onClick={()=>handledelete(item)}>DELETE</span></td>
+                
               </tr>
             ))} 
+                  {openeditmodal && 
+              <div className='modal-container'>
+                <div className='modal'>
+                  <span className='close' onClick={handleeditclose}>X</span>
+                    <EditForm/>
+                </div>
+              </div>
+      }  
         </tbody>
       </table>
 
